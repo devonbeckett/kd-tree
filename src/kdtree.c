@@ -1,94 +1,140 @@
-/*
- * hw2.c
- *
- *  Created on: Feb 9, 2013
- *      Author: lou
- */
 #include "kdtree.h"
 
-/**
- * Computes the nth Fibonacci number
- * @see http://en.wikipedia.org/wiki/Fibonacci_number
- */
-int fib(int n) {
-	// TODO: compute the nth fibonacchi number
-	if(n<1)return 0;
-	if(n==1)return 1;
-	int a = 1;
-	int b = 0;
-	int tmp = 0;
-	while(n>0){
-		tmp = b;
-		b = a+b;
-		a = tmp;
-		n--;
-	}
-	return b;
+/* This function will return the first exact match for the color input
+and NULL if there is none. */
+KDTreeNode* find(int * C[], KDTreeNode* T){
+
+	return NULL;
 }
 
-/**
- * This function opens a directory and counts the number of files
- * in it.  If the path provided is not a directory or can
- * not be opened, this function returns 0.
- */
-int numFiles(char* path) {
-	DIR *dp; // a pointer to a directory
-	int rv = 0; // the return value
-	struct dirent *ep; // a directory entry
-
-	// TODO: open the directory using opendir, and see if it was successful
-	dp = opendir(path);
-	if(dp != NULL){
-		// TODO: Count the files in the directory
-		while(readdir(dp))
-			rv++;
-		// TODO: close the directy
-		closedir(dp);
+/* This function compares a node's color with a color argument and
+returns true if it is a match and false if not. */
+bool colorMatch(int * C[], KDTreeNode* N){
+	if(N->color[0] == C[0]){
+		if(N->color[1] == C[1]){
+			if(N->color[2] == C[2]){
+				return true;
+			}
+		}
 	}
-	// TODO: return result
-	return rv;
+	return false;
 }
 
-/**
- * This function computes the size of a file (in bytes)
- * using the fopen and fseek commands.
- *
- * If the file can not be opened, return 0
- */
-long int getFileSize(char* file) {
-	FILE* f; // the file to open
-	long int rv = 0; // the return value
-	// TODO: See if you can open the file
-	f = fopen(file, "r");
-	if(f != NULL){
-		// TODO: If successful, seek to the end of the file
-		fseek(f,0,SEEK_END);
-		// TODO: use ftell to see how far you seeked
-		rv = ftell(f);
-		// TODO: close the file
-		fclose(f);
-	}
-	// TODO: return result
-	return rv;
+/* This function will return the first nearest match for the color input
+and NULL if the tree is empty. */
+KDTreeNode* findNearest(int * C[], KDTreeNode* T){
+	return NULL;
 }
 
-/**
- * This function looks up an evironment variable using the
- * getenv function.
- * @see http://www.cplusplus.com/reference/cstdlib/getenv/
- *
- * If the environment variable is not found,
- * you should return the string "None"
- */
-char* getEnvValue(const char* name) {
-	char * rv;
+/* This function will delete a node from the tree. The return value will
+be true if the node was deleted and false if the node was not found. */
+bool delete(int * C[], KDTreeNode* T){
+	if(T != NULL){
+		if(colorMatch(C, T)){
+			// delete
+		} else {
+			delete1(C, T);
+		}
+	}
+	return false;
+}
 
-	// TODO: look up the environment variable
-	rv = getenv(name);
-	// TODO: check if it is  found
-	if(rv == NULL)
-		// TODO: if not, set the return value to "None"
-		return "None";
-	// TODO: return result
-	return rv;
+KDTreeNode* delete1(int * C[], KDTreeNode* T){
+	if(T != NULL){
+		if(colorMatch(C, T)){
+			//delete
+		} else {
+			if(C[0] < T->color[0]){
+				return delete2(C, T->left);
+			} else {
+				return delete2(C, T->right);
+			}
+		}
+	}
+	return NULL;
+}
+
+KDTreeNode* delete2(int * C[], KDTreeNode* T){
+	KDTreeNode N;
+	if(T != NULL){
+		if(colorMatch(C, T)){
+			//delete
+		} else {
+		if(C[1] < T->color[1]){
+				return delete3(C, T->left);
+			} else {
+				return delete3(C, T->right);
+			}
+		}
+	}
+	return NULL;
+}
+
+KDTreeNode* delete3(int * C[], KDTreeNode* T){
+	KDTreeNode N;
+	if(T != NULL){
+		if(colorMatch(C, T)){
+			//delete
+		} else {
+			if(C[2] < T->color[2]){
+				return delete1(C, T->left);
+			} else {
+				return delete1(C, T->right);
+			}
+		}
+	}
+	return NULL;
+}
+
+/* This will insert a new node in the tree. If T is a NULL it will 
+construct a new node and return a pointer to it*/
+KDTreeNode* insert(KDTreeNode* N, KDTreeNode* T){
+	if(N != NULL ){
+		if(T == NULL){
+			T = N;
+		} else {
+			T = insert1(N,T);
+		}
+		return T;
+	}
+	return NULL;
+}
+
+KDTreeNode* insert1(KDTreeNode* N, KDTreeNode* T){
+	if(T == NULL){
+		T = N;
+	} else {
+		if(T->color[0] > N->color[0]){
+			T = insert2(N, T->left);
+		} else (T->color[0] <= N->color[0]){
+			T = insert2(N, T->right);
+		}
+	}
+	return T;
+}
+
+KDTreeNode* insert2(KDTreeNode* N, KDTreeNode* T){
+	if(T == NULL){
+		T = N;
+	} else {
+		if(T->color[0] > N->color[0]){
+			T = insert3(N, T->left);
+		} else (T->color[0] <= N->color[0]){
+			T = insert3(N, T->right);
+		}
+	}
+	return T;
+}
+
+KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T){
+	if(T == NULL){
+		T = N;
+	} else {
+		if(T->color[0] > N->color[0]){
+			T = insert1(N, T->left);
+		} else (T->color[0] <= N->color[0]){
+			T = insert1(N, T->right);
+		}
+	}
+	return T;
 }
