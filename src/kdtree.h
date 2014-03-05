@@ -36,3 +36,11 @@ construct a new node and return a pointer to it*/
 KDTreeNode* insert(KDTreeNode* N, KDTreeNode* T);
 KDTreeNode* insert2(KDTreeNode* N, KDTreeNode* T);
 KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T);
+
+/* This function will return a pointer to a new KDTreeNode */
+KDTreeNode create_a(int C[], char* img);
+KDTreeNode* create_i(int C0, int C1, int C2, char* img);
+
+/* This function will print the tree to the console */
+void printTree(KDTreeNode* T);
+void printNode(KDTreeNode* N);
