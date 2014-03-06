@@ -1,5 +1,4 @@
 #include "kdtree.h"
-#include <stdio.h>
 
 /* This function will return the first exact match for the color input
 and NULL if there is none. */
@@ -23,7 +22,7 @@ KDTreeNode* find2(int C[], KDTreeNode* T){
 		if(colorMatch(C, T)){
 			return T;
 		} else {
-			if(C[1] < T->color[1]){
+			if(C[0] < T->color[0]){
 				return find3(C, T->left);
 			} else {
 				return find3(C, T->right);
@@ -38,7 +37,7 @@ KDTreeNode* find3(int C[], KDTreeNode* T){
 		if(colorMatch(C, T)){
 			return T;
 		} else {
-			if(C[2] < T->color[2]){
+			if(C[0] < T->color[0]){
 				return find(C, T->left);
 			} else {
 				return find(C, T->right);
@@ -63,31 +62,15 @@ int colorMatch(int C[], KDTreeNode* N){
 
 /* This function will return the first nearest match for the color input
 and NULL if the tree is empty. */
-KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* N, int dist){
-	int evalDist;
+KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* N){
 	if(T != NULL){
-		evalDist = eval(C, T);
-		if(C[0] < T->color[0]){
-			N = findNearest2(C, T->left, T, dist);
-		} else {
-			N = findNearest2(C, T->right, T, dist); 
-		}
-		evalDist = abs(C[0] - N->color[0]);
-	}
-	return N;
-}
-void temp(int C[], KDTreeNode* T, KDTreeNode* N){
-	int dist, newDist ;
-	if(T != NULL){
-		dist = eval(C, T);
-		if(!d){
+		if(colorMatch(C, T)){
 			return T;
 		} else {
 			if(C[0] < T->color[0]){
-				N = findNearest2(C, T->left, T);
-				newDist = abs(C[0] - N->color[0])
+				return findNearest2(C, T->left, T);
 			} else {
-				N = findNearest2(C, T->right, T);
+				return findNearest2(C, T->right, T);
 			}
 		}
 	}
@@ -99,7 +82,7 @@ KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* N){
 		if(colorMatch(C, T)){
 			return T;
 		} else {
-			if(C[1] < T->color[1]){
+			if(C[0] < T->color[0]){
 				return findNearest3(C, T->left, T);
 			} else {
 				return findNearest3(C, T->right, T);
@@ -114,7 +97,7 @@ KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* N){
 		if(colorMatch(C, T)){
 			return T;
 		} else {
-			if(C[2] < T->color[2]){
+			if(C[0] < T->color[0]){
 				return findNearest(C, T->left, T);
 			} else {
 				return findNearest(C, T->right, T);
@@ -122,24 +105,6 @@ KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* N){
 		}
 	}
 	return N;
-}
-
-int eval(int C[], KDTreeNode* N){
-	int r, g, b;
-	r = abs(C[0] - N->color[0]);
-	g = abs(C[1] - N->color[1]);
-	b = abs(C[2] - N->color[2]);
-	r = (r*r*r);
-	g = (g*g*g);
-	b = (b*b*b);
-	return r + g + b;
-}
-
-int abs(int n){
-	if(n < 0){
-		n = n * (-1);
-	}
-	return n;
 }
 
 /* This function will delete a node from the tree. The return value will
@@ -194,15 +159,13 @@ int delete3(int C[], KDTreeNode* T){
 /* This will insert a new node in the tree. If T is a NULL it will 
 return a pointer to the new node. */
 KDTreeNode* insert(KDTreeNode* N, KDTreeNode* T){
-	if(N != NULL){
-		if(T == NULL){
-			T = N;
+	if(T == NULL){
+		T = N;
+	} else {
+		if(T->color[0] > N->color[0]){
+			T = insert2(N, T->left);
 		} else {
-			if(T->color[0] > N->color[0]){
-				T->left = insert2(N, T->left);
-			} else {
-				T->right = insert2(N, T->right);
-			}
+			T = insert2(N, T->right);
 		}
 	}
 	return T;
@@ -212,10 +175,10 @@ KDTreeNode* insert2(KDTreeNode* N, KDTreeNode* T){
 	if(T == NULL){
 		T = N;
 	} else {
-		if(T->color[1] > N->color[1]){
-			T->left = insert3(N, T->left);
+		if(T->color[0] > N->color[0]){
+			T = insert3(N, T->left);
 		} else {
-			T->right = insert3(N, T->right);
+			T = insert3(N, T->right);
 		}
 	}
 	return T;
@@ -225,50 +188,11 @@ KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T){
 	if(T == NULL){
 		T = N;
 	} else {
-		if(T->color[2] > N->color[2]){
-			T->left = insert(N, T->left);
+		if(T->color[0] > N->color[0]){
+			T = insert(N, T->left);
 		} else {
-			T->right = insert(N, T->right);
+			T = insert(N, T->right);
 		}
 	}
 	return T;
-}
-
-/* This function will return a pointer to a new KDTreeNode */
-KDTreeNode create_a(int C[], char* img){
-	KDTreeNode N = {(N.color)[0] = C[0], (N.color)[1] = C[1], (N.color)[2] = C[2], img, NULL, NULL};
-	return N;
-}
-
-KDTreeNode* create_i(int C0, int C1, int C2, char* img){
-	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
-	N->color[0] = C0;
-	N->color[1] = C1;
-	N->color[2] = C2;
-	N->img = img;
-	N->left = NULL;
-	N->right = NULL;
-	return N;
-}
-
-/* This function will print the tree to the console */
-void printTree(KDTreeNode* T){
-	if(T != NULL){
-		printNode(T);
-		printf(" left->");
-		printNode(T->left);
-		printf(" right->");
-		printNode(T->right);
-		printf("\n");
-		printTree(T->left);
-		printTree(T->right);
-	}
-}
-
-void printNode(KDTreeNode* N){
-	if(N != NULL){
-		printf("(%d,%d,%d)%s", N->color[0], N->color[1], N->color[2], N->img);
-	} else {
-		printf("NULL");
-	}
 }

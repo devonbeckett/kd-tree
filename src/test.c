@@ -4,21 +4,37 @@
 int main(int argc, char *argv[]){
 	int i;
 	int c[3];
-	KDTreeNode* T = NULL;
-	KDTreeNode* N;
-	KDTreeNode* P = NULL;
+	KDTreeNode* T;
+	//KDTreeNode N;
+	KDTreeNode* P;
 
-	T = insert(create_i(50,50,50,"test1"), T);
-	T = insert(create_i(150,50,50,"test2"), T);
-	T = insert(create_i(50,150,50,"test3"), T);
-	T = insert(create_i(50,0,50,"test4"), T);
-	T = insert(create_i(210,50,50,"test5"), T);
-	T = insert(create_i(50,50,0,"test6"), T);
-	T = insert(create_i(50,5,0,"test7"), T);
-	T = insert(create_i(50,50,50,"test8"), T);
-
+	/*for(i=0;i<50;i++){
+		c[0] = i*(i%3);
+		c[1] = i*(i%3);
+		c[2] = i*(i%3);
+		KDTreeNode n = {(n.color)[0] = c[0], (n.color)[1] = c[1], (n.color)[2] = c[2],
+			.img = "path", .left = NULL, .right = NULL};
+		T = insert(&n, T);
+	}
 	int I[3] = {50,50,50};
-	//P = find(I, T);
+	N = find(I, T);
+	if(N == NULL){
+		
+		N = findNearest(I, T, NULL);
+	}
+	if(N == NULL){
+		printf("FAILURE!");
+	} else {
+		printf("R%d, G%d, B%d, %s", (N->color)[0], (N->color)[1], (N->color)[2], N->img);
+	}
+	*/
+	int I[3] = {50,50,50};
+	KDTreeNode N = {(N.color)[0] = I[0], (N.color)[1] = I[1], (N.color)[2] = I[2], "test", NULL, NULL};
+	T = insert(&N, T);
+	I[0]++;
+	I[1]++;
+	I[2]++;
+	P = find(I, T);
 	if(P == NULL){
 		printf("Could not find (%d,%d,%d). Now searching for nearest result.\n", I[0], I[1], I[2]);
 		P = findNearest(I, T, NULL);
@@ -26,10 +42,7 @@ int main(int argc, char *argv[]){
 	if(P == NULL){
 		printf("FAILURE!\n");
 	} else {
-		printf("(%d,%d,%d) found. \"%s\"\n\n", (P->color)[0], (P->color)[1], (P->color)[2], P->img);
+		printf("(%d,%d,%d) found.\n", (P->color)[0], (P->color)[1], (P->color)[2]);
 	}
-
-	printTree(T);
-
 	exit(0);
 }
