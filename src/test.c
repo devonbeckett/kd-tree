@@ -2,7 +2,6 @@
 #include "kdtree.h"
 
 int main(int argc, char *argv[]){
-	int i;
 	int c[3];
 	KDTreeNode* T = NULL;
 	KDTreeNode* N;
@@ -18,17 +17,17 @@ int main(int argc, char *argv[]){
 	T = insert(create_i(50,50,50,"test8"), T);
 
 	int I[3] = {50,50,50};
-	//P = find(I, T);
+	P = find(I, T);
 	if(P == NULL){
 		printf("Could not find (%d,%d,%d). Now searching for nearest result.\n", I[0], I[1], I[2]);
-		P = findNearest(I, T, NULL);
+		//P = findNearest(I, T, NULL);
 	}
 	if(P == NULL){
 		printf("FAILURE!\n");
 	} else {
 		printf("(%d,%d,%d) found. \"%s\"\n\n", (P->color)[0], (P->color)[1], (P->color)[2], P->img);
 	}
-
+	
 	printTree(T);
 
 	exit(0);

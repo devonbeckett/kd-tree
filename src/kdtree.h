@@ -7,6 +7,7 @@ struct KDTreeNode{
 	char* img;
 	KDTreeNode* left;
 	KDTreeNode* right;
+	KDTreeNode* parent;
 };
 
 /* This function will return the first exact match for the color input
@@ -21,15 +22,14 @@ int colorMatch(int C[], KDTreeNode* N);
 
 /* This function will return the first nearest match for the color input
 and NULL if the tree is empty. */
+/*
 KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* N);
 KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* N);
 KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* N);
-
-/* This function will delete a node from the tree. The return value will
-be true if the node was deleted and false if the node was not found. */
-int delete(int C[], KDTreeNode* T);
-int delete2(int C[], KDTreeNode* T);
-int delete3(int C[], KDTreeNode* T);
+*/
+/* This function will delete a node from the tree. The return value is a
+pointer to the root node of the tree. */
+KDTreeNode* delete(KDTreeNode* N, KDTreeNode* T);
 
 /* This will insert a new node in the tree. If T is a NULL it will 
 construct a new node and return a pointer to it*/
@@ -38,7 +38,7 @@ KDTreeNode* insert2(KDTreeNode* N, KDTreeNode* T);
 KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T);
 
 /* This function will return a pointer to a new KDTreeNode */
-KDTreeNode create_a(int C[], char* img);
+KDTreeNode* create_a(int C[], char* img);
 KDTreeNode* create_i(int C0, int C1, int C2, char* img);
 
 /* This function will print the tree to the console */
