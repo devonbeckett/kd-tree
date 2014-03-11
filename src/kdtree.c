@@ -63,22 +63,35 @@ int colorMatch(int C[], KDTreeNode* N){
 
 /* This function will return the first nearest match for the color input
 and NULL if the tree is empty. */
-/*KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN, int dist){
-	int evalDist;
-	KDTreeNode* N;
+KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN){
 	if(T != NULL){
-		evalDist = eval(C, T);
-		if(dist == NULL){
-			dist = evalDist;
-		}
-		if(C[0] < T->color[0]){
-			N = findNearest2(C, T->left, T, dist);
+		// set the first NN to the first leaf found
+		if(NN == NULL){
+			if(T->left == NULL && T->right == NULL){
+				return T;
+			} else if(C[0] < T->color[0]){
+				NN = findNearest2(C, T->left, NULL);
+			} else {
+				NN = findNearest2(C, T->right, NULL); 
+			}
+		// Start recursively looking for a closer node
 		} else {
-			N = findNearest2(C, T->right, T, dist); 
-		}
+			// Evaluate the current node
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			// See if the other branch needs checked.
+			} else {
+				//check to see which side the target is on
+				if(C[0] < T->color[0]){
+					
+				} else {
+					
+				}
+			}
+		
 		//evalDist = abs(C[0] - N->color[0]);
 	}
-	return N;
+	return NN;
 }
 void temp(int C[], KDTreeNode* T, KDTreeNode* N){
 	int dist, newDist ;
@@ -126,7 +139,7 @@ KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* N){
 		}
 	}
 	return N;
-}*/
+}
 
 int eval(int C[], KDTreeNode* N){
 	int r, g, b;
