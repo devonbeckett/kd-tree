@@ -22,11 +22,11 @@ int colorMatch(int C[], KDTreeNode* N);
 
 /* This function will return the first nearest match for the color input
 and NULL if the tree is empty. */
-/*
-KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* N);
-KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* N);
-KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* N);
-*/
+
+KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN);
+KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* NN);
+KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* NN);
+int eval(int C[], KDTreeNode* N);
 /* This function will delete a node from the tree. The return value is a
 pointer to the root node of the tree. */
 KDTreeNode* delete(KDTreeNode* N, KDTreeNode* T);
