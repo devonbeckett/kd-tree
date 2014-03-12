@@ -1,3 +1,41 @@
+/*
+	Written by Devon Beckett & Priyal Patel
+	Year of 2014
+	This code provides the implementation of a three dimensional binary 
+	search tree. 
+	Use:
+		KDTreeNode* insert(KDTreeNode* N, KDTreeNode* T)
+			Inserts node N into tree T. The return value is a pointer to T.
+
+		KDTreeNode* find(int C[], KDTreeNode* T)
+			Finds the node matching the key of C. Will return NULL if the
+			node cannot be found.
+		
+		KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN)
+			Finds the closest match to C in the tree. NN should always
+			equall NULL when first called. The code uses it for 
+			recurssive calls.
+
+		KDTreeNode* delete(KDTreeNode* N, KDTreeNode* T)
+			Will remove a node from a tree. Returns a pointer to the 
+			root of the tree. WARNING: If the node does not exist in
+			the tree the program will Seg fault.
+
+		KDTreeNode* create_a(int C[], char* img)
+			This will create a new node from an array and return the
+			pointer to it.
+
+		KDTreeNode* create_i(int C0, int C1, int C2, char* img)
+			This will create a new node from three integers and return
+			the pointer to it.
+		
+		void printTree(KDTreeNode* T)
+			Will print the entire tree to STDOUT.
+
+		void printNode(KDTreeNode* N)
+			Will print a single node to STDOUT.
+*/
+
 #include "kdtree.h"
 #include <stdio.h>
 
@@ -69,30 +107,22 @@ KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN){
 		if(NN == NULL){
 			if(T->left == NULL && T->right == NULL){
 				return T;
-			} else if(C[0] < T->color[0]){
-				NN = findNearest2(C, T->left, NN);
-			} else {
-				NN = findNearest2(C, T->right, NN); 
-			}
-		// Start recursively looking for a closer node
-		} else {
-			// Evaluate the current node
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			// See if the other branch needs checked.
-			} else {
-				//check to see which side the target is on
-				if(C[0] < T->color[0]){
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest2(C, T->left, NN);
-					}
-				} else {
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest2(C, T->right, NN);
-					}
-				}
 			}
 		}
+		
+		if(C[0] < T->color[0]){
+			NN = findNearest2(C, T->left, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			NN = findNearest2(C, T->right, NN);
+		} else {
+			NN = findNearest2(C, T->right, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			NN = findNearest2(C, T->left, NN);
+		}		
 	}
 	return NN;
 }
@@ -103,30 +133,22 @@ KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* NN){
 		if(NN == NULL){
 			if(T->left == NULL && T->right == NULL){
 				return T;
-			} else if(C[0] < T->color[0]){
-				NN = findNearest3(C, T->left, NN);
-			} else {
-				NN = findNearest3(C, T->right, NN); 
-			}
-		// Start recursively looking for a closer node
-		} else {
-			// Evaluate the current node
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			// See if the other branch needs checked.
-			} else {
-				//check to see which side the target is on
-				if(C[0] < T->color[0]){
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest3(C, T->left, NN);
-					}
-				} else {
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest3(C, T->right, NN);
-					}
-				}
 			}
 		}
+
+		if(C[1] < T->color[1]){
+			NN = findNearest3(C, T->left, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			//NN = findNearest3(C, T->right, NN);
+		} else {
+			NN = findNearest3(C, T->right, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			NN = findNearest3(C, T->left, NN);
+		}	
 	}
 	return NN;
 }
@@ -137,30 +159,22 @@ KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* NN){
 		if(NN == NULL){
 			if(T->left == NULL && T->right == NULL){
 				return T;
-			} else if(C[0] < T->color[0]){
-				NN = findNearest(C, T->left, NN);
-			} else {
-				NN = findNearest(C, T->right, NN); 
-			}
-		// Start recursively looking for a closer node
-		} else {
-			// Evaluate the current node
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			// See if the other branch needs checked.
-			} else {
-				//check to see which side the target is on
-				if(C[0] < T->color[0]){
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest(C, T->left, NN);
-					}
-				} else {
-					if(T->color[0] < NN->color[0]){
-						NN = findNearest(C, T->right, NN);
-					}
-				}
 			}
 		}
+
+		if(C[2] < T->color[2]){
+			NN = findNearest(C, T->left, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			NN = findNearest(C, T->right, NN);
+		} else {
+			NN = findNearest(C, T->right, NN);
+			if(eval(C,T) < eval(C,NN)){
+				NN = T;
+			}
+			NN = findNearest(C, T->left, NN);
+		}	
 	}
 	return NN;
 }
@@ -176,8 +190,9 @@ int eval(int C[], KDTreeNode* N){
 	return r + g + b;
 }
 
-/* This function will delete a node from the tree. The return value will
-be true if the node was deleted and false if the node was not found. */
+/* This function will delete a node from the tree. The return value is a
+pointer to the root node of the tree. The deleted node is freed from memory. 
+Warning if the node does not exist in the tree it will Seg Fault.*/
 KDTreeNode* delete(KDTreeNode* N, KDTreeNode* T){
 	if(N != NULL){
 		if(N == T){
@@ -291,7 +306,8 @@ KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T){
 	return T;
 }
 
-/* This function will return a pointer to a new KDTreeNode */
+/* This function will return a pointer to a new KDTreeNode created from 
+an array. */
 KDTreeNode* create_a(int C[], char* img){
 	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
 	N->color[0] = C[0];
@@ -304,6 +320,8 @@ KDTreeNode* create_a(int C[], char* img){
 	return N;
 }
 
+/* This function will return a pointer to a new KDTreeNode created from 
+three integers. */
 KDTreeNode* create_i(int C0, int C1, int C2, char* img){
 	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
 	N->color[0] = C0;
@@ -320,9 +338,9 @@ KDTreeNode* create_i(int C0, int C1, int C2, char* img){
 void printTree(KDTreeNode* T){
 	if(T != NULL){
 		printNode(T);
-		printf(" left->");
+		printf("\n\tleft->");
 		printNode(T->left);
-		printf(" right->");
+		printf("\n\tright->");
 		printNode(T->right);
 		printf("\n");
 		printTree(T->left);
