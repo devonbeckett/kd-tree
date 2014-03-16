@@ -35,14 +35,18 @@
 		void printNode(KDTreeNode* N)
 			Will print a single node to STDOUT.
 */
-			
+#ifndef KDTREE_H_
+#define KDTREE_H_
+
 #include <string.h>
 #include <stdlib.h>
+#include "cv.h"
+#include "highgui.h"
 
 typedef struct KDTreeNode KDTreeNode;
 struct KDTreeNode{
 	int color[3];
-	char* img;
+	IplImage* img;
 	KDTreeNode* left;
 	KDTreeNode* right;
 	KDTreeNode* parent;
@@ -77,13 +81,18 @@ KDTreeNode* insert2(KDTreeNode* N, KDTreeNode* T);
 KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T);
 
 /* This function will return a pointer to a new KDTreeNode created from 
+an IplImage. */
+KDTreeNode* create(IplImage* img);
+
+/* This function will return a pointer to a new KDTreeNode created from 
 an array. */
-KDTreeNode* create_a(int C[], char* img);
+KDTreeNode* create_a(int C[], IplImage* img);
 
 /* This function will return a pointer to a new KDTreeNode created from 
 three integers. */
-KDTreeNode* create_i(int C0, int C1, int C2, char* img);
+KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img);
 
 /* This function will print the tree to the console */
 void printTree(KDTreeNode* T);
 void printNode(KDTreeNode* N);
+#endif
