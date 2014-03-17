@@ -86,7 +86,7 @@ int handle_request(char * req, char* rv) {
 				c1 = strtok(ctoken,"/");
 				c2 = strtok(NULL,"/");
 				c3 = strtok(NULL," ");
-				int color[3] = {atoi(ctoken), atoi(c2), atoi(c3)};
+				int color[3] = {atoi(c3), atoi(c2), atoi(c1)};
 				int flen;
 				f = fopen(findNearest(color, T, NULL)->path, "r");
 				if(f != NULL){
