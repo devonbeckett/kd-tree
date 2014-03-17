@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 10, 2013
  *      Author: lou
+ *
+ *  Modified on: Mar 17, 2014
+ *		Change Author: Devon Beckett
  */
 
 // Images from http://press.liacs.nl/mirflickr/#sec_download
@@ -56,17 +59,12 @@ int main(int argc, char ** argv) {
 	printf("Finding closest images\n");
 	// get the closest image to each subimage
 	closest = malloc(sizeof(IplImage*) * numColumns * numRows);
-	//printf("%d,%d", numColumns, numRows);
+	printf("%d,%d", numColumns, numRows);
 #pragma omp parallel for
 	for (i = 0; i < numColumns * numRows; i++) {
-		//int ci = findClosest(scolors[i], tcolors, numberOfImages);
-		//printf("img%d start\n",i);
 		int ci[3] = {scolors[i].val[0], scolors[i].val[1], scolors[i].val[2]};
-		//printf("img%d mid1\n",i);
 		KDTreeNode* n = findNearest(ci,timages,NULL);
-		//printf("img%d mid2\n",i);
 		closest[i] = n->img;
-		//printf("img%d finish\n",i);
 	}
 	printf("Closest Images found\n");
 	// stitch the result

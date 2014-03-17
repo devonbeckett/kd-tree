@@ -21,11 +21,15 @@
 			root of the tree. WARNING: If the node does not exist in
 			the tree the program will Seg fault.
 
-		KDTreeNode* create_a(int C[], char* img)
+		KDTreeNode* create(IplImage* img)
 			This will create a new node from an array and return the
 			pointer to it.
 
-		KDTreeNode* create_i(int C0, int C1, int C2, char* img)
+		KDTreeNode* create_a(int C[], IplImage* img)
+			This will create a new node from an array and return the
+			pointer to it.
+
+		KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img)
 			This will create a new node from three integers and return
 			the pointer to it.
 		
@@ -104,34 +108,28 @@ and NULL if the tree is empty. */
 KDTreeNode* findNearest(int C[], KDTreeNode* T, KDTreeNode* NN){
 	//printf("NN1\n");
 	if(T != NULL){
-		//printf("");
 		// set the first NN to the first leaf found
 		if(NN == NULL){
-			//printf("");
 			if(T->left == NULL && T->right == NULL){
-				//printf("leaf1\n");
 				return T;
 			}
 		}
-		//printf("");
 		if(C[0] < T->color[0]){
 			NN = findNearest2(C, T->left, NN);
-			//printf("rNN1a\n");
 			if(NN != NULL){
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			}}
+				if(eval(C,T) < eval(C,NN)){
+					NN = T;
+				}
+			}
 			NN = findNearest2(C, T->right, NN);
-			//printf("rNN1b\n");
 		} else {
 			NN = findNearest2(C, T->right, NN);
-			//printf("rNN1c\n");
 			if(NN != NULL){
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			}}
+				if(eval(C,T) < eval(C,NN)){
+					NN = T;
+				}
+			}
 			NN = findNearest2(C, T->left, NN);
-			//printf("rNN1d\n");
 		}	
 	}
 	return NN;
@@ -143,88 +141,68 @@ KDTreeNode* findNearest2(int C[], KDTreeNode* T, KDTreeNode* NN){
 		// set the first NN to the first leaf found
 		if(NN == NULL){
 			if(T->left == NULL && T->right == NULL){
-				//printf("leaf2\n");
 				return T;
 			}
 		}
 
 		if(C[1] < T->color[1]){
-			//printf("*");
 			NN = findNearest3(C, T->left, NN);
-			//printf("rNN2a\n");
 			if(NN != NULL){
 			if(eval(C,T) < eval(C,NN)){
 				NN = T;
 			}}
-			//NN = findNearest3(C, T->right, NN);
-			//printf("rNN2b\n");
-		} else {
-			//printf("**");
 			NN = findNearest3(C, T->right, NN);
-			//printf("rNN2c\n");
+		} else {
+			NN = findNearest3(C, T->right, NN);
 			if(NN != NULL){
 			if(eval(C,T) < eval(C,NN)){
 				NN = T;
 			}}
 			NN = findNearest3(C, T->left, NN);
-			//printf("rNN2d\n");
 		}	
 	}
 	return NN;
 }
 
 KDTreeNode* findNearest3(int C[], KDTreeNode* T, KDTreeNode* NN){
-	//printf("NN3\n");
 	if(T != NULL){
 		// set the first NN to the first leaf found
 		if(NN == NULL){
 			if(T->left == NULL && T->right == NULL){
-				//printf("leaf3\n");
 				return T;
 			}
 		}
 
 		if(C[2] < T->color[2]){
 			NN = findNearest(C, T->left, NN);
-			//printf("rNN3a\n");
 			if(NN != NULL){
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			}}
+				if(eval(C,T) < eval(C,NN)){
+					NN = T;
+				}
+			}
 			NN = findNearest(C, T->right, NN);
-			//printf("rNN3b\n");
 		} else {
 			
 			NN = findNearest(C, T->right, NN);
-			//printf("rNN3c\n");
 			if(NN != NULL){
-			if(eval(C,T) < eval(C,NN)){
-				NN = T;
-			}}
+				if(eval(C,T) < eval(C,NN)){
+					NN = T;
+				}
+			}
 			NN = findNearest(C, T->left, NN);
-			//printf("rNN3d\n");
 		}
 	}
 	return NN;
 }
 
 int eval(int C[], KDTreeNode* N){
-	//printf("EVAL0\n");
-	//printNode(N);
 	int r, g, b;
-	//printf("EVAL1\n");
 	r = (C[0] - N->color[0]);
-	//printf("EVAL2\n");
 	g = (C[1] - N->color[1]);
-	//printf("EVAL3\n");
 	b = (C[2] - N->color[2]);
-	//printf("EVAL4\n");
 	r = (r*r);
-	//printf("EVAL5\n");
 	g = (g*g);
-	//printf("EVAL6\n");
 	b = (b*b);
-	//printf("EVAL7\n");
 	return r + g + b;
 }
 
@@ -346,13 +324,14 @@ KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T){
 
 /* This function will return a pointer to a new KDTreeNode created from 
 an IplImage. */
-KDTreeNode* create(IplImage* img){
+KDTreeNode* create(IplImage* img, char* path){
 	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
 	CvScalar c = cvAvg(img, NULL);
 	N->color[0] = c.val[0];
 	N->color[1] = c.val[1];
 	N->color[2] = c.val[2];
 	N->img = img;
+	N->path = path;
 	N->left = NULL;
 	N->right = NULL;
 	N->parent = NULL;
@@ -361,12 +340,13 @@ KDTreeNode* create(IplImage* img){
 
 /* This function will return a pointer to a new KDTreeNode created from 
 an array. */
-KDTreeNode* create_a(int C[], IplImage* img){
+KDTreeNode* create_a(int C[], IplImage* img, char* path){
 	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
 	N->color[0] = C[0];
 	N->color[1] = C[1];
 	N->color[2] = C[2];
 	N->img = img;
+	N->path = path;
 	N->left = NULL;
 	N->right = NULL;
 	N->parent = NULL;
@@ -375,12 +355,13 @@ KDTreeNode* create_a(int C[], IplImage* img){
 
 /* This function will return a pointer to a new KDTreeNode created from 
 three integers. */
-KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img){
+KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img, char* path){
 	KDTreeNode* N = (KDTreeNode*)malloc(sizeof(KDTreeNode));
 	N->color[0] = C0;
 	N->color[1] = C1;
 	N->color[2] = C2;
 	N->img = img;
+	N->path = path;
 	N->left = NULL;
 	N->right = NULL;
 	N->parent = NULL;

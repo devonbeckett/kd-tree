@@ -21,11 +21,15 @@
 			root of the tree. WARNING: If the node does not exist in
 			the tree the program will Seg fault.
 
-		KDTreeNode* create_a(int C[], char* img)
+		KDTreeNode* create(IplImage* img)
 			This will create a new node from an array and return the
 			pointer to it.
 
-		KDTreeNode* create_i(int C0, int C1, int C2, char* img)
+		KDTreeNode* create_a(int C[], IplImage* img)
+			This will create a new node from an array and return the
+			pointer to it.
+
+		KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img)
 			This will create a new node from three integers and return
 			the pointer to it.
 		
@@ -47,6 +51,7 @@ typedef struct KDTreeNode KDTreeNode;
 struct KDTreeNode{
 	int color[3];
 	IplImage* img;
+	char* path;
 	KDTreeNode* left;
 	KDTreeNode* right;
 	KDTreeNode* parent;
@@ -82,15 +87,15 @@ KDTreeNode* insert3(KDTreeNode* N, KDTreeNode* T);
 
 /* This function will return a pointer to a new KDTreeNode created from 
 an IplImage. */
-KDTreeNode* create(IplImage* img);
+KDTreeNode* create(IplImage* img, char* path);
 
 /* This function will return a pointer to a new KDTreeNode created from 
 an array. */
-KDTreeNode* create_a(int C[], IplImage* img);
+KDTreeNode* create_a(int C[], IplImage* img, char* path);
 
 /* This function will return a pointer to a new KDTreeNode created from 
 three integers. */
-KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img);
+KDTreeNode* create_i(int C0, int C1, int C2, IplImage* img, char* path);
 
 /* This function will print the tree to the console */
 void printTree(KDTreeNode* T);

@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 10, 2013
  *      Author: lou
+ *
+ *  Modified on: Mar 17, 2014
+ *		Change Author: Devon Beckett
  */
 
 #include "hw4kd.h"
@@ -30,7 +33,7 @@ KDTreeNode* loadImages(int numImages, char ** fileNames) {
 			fprintf(stderr, "Could not load file %s\n", fileNames[i]);
 			continue;
 		}
-		rv = insert(create(img), rv);
+		rv = insert(create(img, fileNames[i]), rv);
 	}
 
 	// TODO: return results
